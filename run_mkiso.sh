@@ -51,5 +51,5 @@ fi
 
 echo "$sudo_passwd" | sudo -S bash ./mkiso.sh $arch > ./build_iso_$arch.log 2>&1
 
-scp live/$(date +%Y%m%d)/*.iso ./build_iso_$arch.log  dml@10.2.18.188:/home/dml/iso_uos-j-desk/
+scp live/"$(date +%Y%m%d)"/*.iso ./build_iso_$arch.log  dml@10.2.18.188:/home/dml/iso_uos-j-desk/
 
