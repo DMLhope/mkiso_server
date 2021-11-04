@@ -1,14 +1,19 @@
 #!/bin/bash
 set -x
 
-git_url="$1"
-branch_name="$2"
-sudo_passwd="$3"
+source ./mkiso.conf
+
+git_url="$git_url"
+branch_name="$branch_name"
+sudo_passwd="$ssh_user_passwd"
 work_path="/data/build_iso"
 project_name=$(echo "$git_url"|sed  "s|.*/||g"|sed "s|.git||g")
 echo "$project_name"
 datetime=$(date +%Y%m%d%H%M%S)
 arch="$4"
+
+server_address_info="$server_address_info"
+
 
 if [ "$git_url" == "" ] || [ "$branch_name" == "" ] || [ "$sudo_passwd" == "" ] ;then
     echo "git地址或分支错误或未输入用户密码..."
@@ -51,5 +56,5 @@ fi
 
 echo "$sudo_passwd" | sudo -S bash ./mkiso.sh $arch > ./build_iso_$arch.log 2>&1
 
-scp live/"$(date +%Y%m%d)"/*.iso ./build_iso_$arch.log  dml@10.2.18.188:/home/dml/iso_uos-j-desk/
+scp live/"$(date +%Y%m%d)"/*.iso ./build_iso_$arch.log  "$server_address_info"
 
