@@ -1,12 +1,13 @@
 #!/bin/bash
-download_url="http://10.2.10.31/user:dml/uos-j-desk/owntest-tools/deepin-reboot-test.tar.gz"
-runtimes="$1"
-password="$2"
+source ./owntest.conf
 
-if [ "$runtimes" == "" ] || [ "$password" == "" ] ;then
-    echo "请提供重启次数及sudo密码"
-    echo "例如重启100次，密码123：bash do_owntest_reboot.sh 100 123"
-    exit
+download_url=$reboot_scrpit_download_url
+runtimes=$reboot_runtimes
+password=$password
+
+if [ "$download_url" == "" ] || [ "$runtimes" == "" ] || [ "$password" == "" ] ;then
+    echo "配置缺失，请检查conf文件是否填写正确"
+    exit 1
 fi
 
 if [ x"$3" != x"" ];then
@@ -15,6 +16,8 @@ if [ x"$3" != x"" ];then
 fi
 
 wget -P ~/ "$download_url"
+
+#TODO 重启脚本名称后续可变
 
 tar -xf deepin-reboot-test.tar.gz
 

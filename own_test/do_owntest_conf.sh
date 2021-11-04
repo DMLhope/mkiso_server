@@ -1,6 +1,29 @@
 #!/bin/bash
 
-sources_list="deb http://sh-internal.deepin.com/repo/v20-J/desktop-mil shangyu main contrib non-free"
+source ./owntest.conf
+
+
+sources_list=$sources_list
+sw_sources_list=$sw_sources_list
+password=$password
+
+if [ "$sources_list" == "" ] || [ "$sw_sources_list" == "" ] || [ "$password" == "" ];then
+    echo "配置缺失，请检查conf文件是否填写正确"
+    exit 1
+fi
+
+if [ $(uname -m) == "sw_64" ];then
+    echo "$sw_sources_list" > /tmp/sources.list
+else
+    echo "$sources_list" > /tmp/sources.list
+fi
+echo "$password"|sudo -S cp -v /tmp/sources.list /etc/apt/sources.list
+echo "$password"|sudo -S mv /etc/apt/sources.list.d /etc/apt/sources.list.bak 
+
+echo "$password"|sudo -S apt update
+
+echo "$password"|sudo -S apt install -y git htop tmux wget
+
 # git_url=""
 # project_name=""
 # work_path="/data/owntest/"
@@ -19,22 +42,15 @@ sources_list="deb http://sh-internal.deepin.com/repo/v20-J/desktop-mil shangyu m
 # ;;
 # esac
 
-if [ $(uname -m) == "sw_64" ];then
-    sources_list="deb http://sh-internal.deepin.com/repo/v20-J/desktop-mil-sw64 shangyu main contrib non-free"
-fi
+
 
 # if [ ! -d $work_path ];then
 #     echo 123|sudo -S mkdir -p $work_path
 #     user=$(whoami)
 #    echo "$sudo_passwd" | sudo -S chown "$user":"$user" "$work_path"
 # fi
-echo $sources_list > /tmp/sources.list
-echo 123|sudo -S cp -v /tmp/sources.list /etc/apt/sources.list
-echo 123|sudo -S mv /etc/apt/sources.list.d /etc/apt/sources.list.bak 
 
-echo 123|sudo -S apt update
 
-echo 123|sudo -S apt install -y git htop tmux wget
 
 
 

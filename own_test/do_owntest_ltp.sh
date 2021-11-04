@@ -1,28 +1,41 @@
 #!/bin/bash
+source ./owntest.conf
 
-wget -P ~/ http://10.2.10.31/user:dml/uos-j-desk/owntest-tools/ltp-20200515.tar.gz
-cd ~/ 
+
+
+download_url=$ltp_scrpit_download_url
+password=$password
+runtime=$ltp_runtime
+
+if [ "$download_url" == "" ] || [ "$runtime" == "" ] || [ "$password" == "" ];then
+    echo "配置缺失，请检查conf文件是否填写正确"
+    exit 1
+fi
+
+wget -P ~/ "$download_url"
+
+cd ~/ || exit 
 
 tar xf ltp-20200515.tar.gz
 
-cd ltp
+cd ltp || exit
 
-echo 123 |sudo -S ./travis/debian.sh
+echo "$password" |sudo -S ./travis/debian.sh
 
 make autotools 
 
 ./configure
 
 if [ $(uname -m) != sw_64 ];then
-    echo 123 |sudo -S sed -i "s|#define ustat statfs|//#define ustat statfs|g"  /usr/include/unistd.h
+    echo "$password" |sudo -S sed -i "s|#define ustat statfs|//#define ustat statfs|g"  /usr/include/unistd.h
 fi
 
 make -j$(nproc)
 
-echo 123 |sudo -S make install
+echo "$password" |sudo -S make install
 
-cd /opt/ltp/testscripts/
+cd /opt/ltp/testscripts/ || exit
 
-echo 123 |sudo -S ./ltpstress.sh -n -t 48
+echo "$password" |sudo -S ./ltpstress.sh -n -t "$runtime"
 
 
