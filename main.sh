@@ -7,6 +7,8 @@ git_url="git@gitlabsh.uniontech.com:military/system/product/uos-j/mkiso-v20-desk
 branch_name="desktop-mil/sp4-stable/1041"
 swbranch_name="sw64/desktop-mil/1041"
 
+log_path=./log/
+
 arch="$1"
 ssh_user_name="uos-j"
 ssh_user_passwd="$2"
@@ -21,27 +23,29 @@ arm64_server="10.2.10.36"
 mips64_server="10.2.21.117"
 sw64_server="10.2.21.91"
 
-
+if [ ! -d $log_path ];then
+    mkdir -p $log_path
+fi
 
 do_ssh(){
 case $arch in
     x86_64)
-        ssh  $ssh_user_name@$amd64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/amd64.log 2>&1 &
+        ssh  $ssh_user_name@$amd64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/amd64-server.log 2>&1 &
     ;;
     arm64)
-        ssh  $ssh_user_name@$arm64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/arm64.log 2>&1 &
+        ssh  $ssh_user_name@$arm64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/arm64-server.log 2>&1 &
     ;;
     mips64)
-        ssh  $ssh_user_name@$mips64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/mips64.log 2>&1 &
+        ssh  $ssh_user_name@$mips64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/mips64-server.log 2>&1 &
     ;;
     sw_64)
-        ssh  $ssh_user_name@$sw64_server "bash -s $git_url $swbranch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/sw64.log 2>&1 &
+        ssh  $ssh_user_name@$sw64_server "bash -s $git_url $swbranch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/sw64-server.log 2>&1 &
     ;;
     all-desk)
-        ssh  $ssh_user_name@$amd64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/amd64.log 2>&1 &
-        ssh  $ssh_user_name@$arm64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/arm64.log 2>&1 &
-        ssh  $ssh_user_name@$mips64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/mips64.log 2>&1 &
-        ssh  $ssh_user_name@$sw64_server "bash -s $git_url $swbranch_name $ssh_user_passwd " < ./run_mkiso.sh  > ./log/sw64.log 2>&1 &
+        ssh  $ssh_user_name@$amd64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/amd64-server.log 2>&1 &
+        ssh  $ssh_user_name@$arm64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/arm64-server.log 2>&1 &
+        ssh  $ssh_user_name@$mips64_server "bash -s $git_url $branch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/mips64-server.log 2>&1 &
+        ssh  $ssh_user_name@$sw64_server "bash -s $git_url $swbranch_name $ssh_user_passwd " < ./run_mkiso.sh  > $log_path/sw64-server.log 2>&1 &
     ;;
     *)
         echo "架构不支持"

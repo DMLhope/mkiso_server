@@ -34,7 +34,7 @@ echo 123|sudo -S mv /etc/apt/sources.list.d /etc/apt/sources.list.bak
 
 echo 123|sudo -S apt update
 
-echo 123|sudo -S apt install -y git htop tmux
+echo 123|sudo -S apt install -y git htop tmux wget
 
 # git clone $git_url $work_path/$project_name
 
