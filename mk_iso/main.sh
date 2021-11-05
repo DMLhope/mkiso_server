@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -x
 source ./mkiso.conf
 
@@ -29,11 +28,6 @@ if [ "$git_url" == "" ] || [ "$log_path" == "" ] || [ "$ssh_user_name" == "" ] |
     exit 1
 fi
 
-if [ "$branch_name" == "" ] && [ "$swbranch_name" == "" ];then
-    echo "配置缺失，请检查conf文件中git分支信息否填写正确"
-    exit 1
-fi
-
 if [ "$arch" == "" ] && [ "$1" != "" ];then
     arch=$1
 fi
@@ -45,18 +39,38 @@ fi
 do_ssh(){
 case $arch in
     x86_64)
+        if [ "$branch_name" == "" ];then
+            echo "配置缺失，请检查conf文件中git分支信息否填写正确"
+            exit 1
+        fi
         ssh  $ssh_user_name@$amd64_server "bash -s $git_url $branch_name $ssh_user_passwd $server_address_info " < ./run_mkiso.sh  > $log_path/amd64-server.log 2>&1 &
     ;;
     arm64)
+        if [ "$branch_name" == "" ];then
+            echo "配置缺失，请检查conf文件中git分支信息否填写正确"
+            exit 1
+        fi
         ssh  $ssh_user_name@$arm64_server "bash -s $git_url $branch_name $ssh_user_passwd $server_address_info " < ./run_mkiso.sh  > $log_path/arm64-server.log 2>&1 &
     ;;
     mips64)
+        if [ "$branch_name" == "" ];then
+            echo "配置缺失，请检查conf文件中git分支信息否填写正确"
+            exit 1
+        fi
         ssh  $ssh_user_name@$mips64_server "bash -s $git_url $branch_name $ssh_user_passwd $server_address_info " < ./run_mkiso.sh  > $log_path/mips64-server.log 2>&1 &
     ;;
     sw_64)
+        if [ "$swbranch_name" == "" ];then
+            echo "配置缺失，请检查conf文件中sw平台git分支信息否填写正确"
+            exit 1
+        fi
         ssh  $ssh_user_name@$sw64_server "bash -s $git_url $swbranch_name $ssh_user_passwd $server_address_info " < ./run_mkiso.sh  > $log_path/sw64-server.log 2>&1 &
     ;;
-    all-desk)
+    all)
+        if [ "$branch_name" == "" ] || [ "$swbranch_name" == "" ];then
+            echo "配置缺失，请检查conf文件中git分支信息否填写正确且完整"
+            exit 1
+        fi
         ssh  $ssh_user_name@$amd64_server "bash -s $git_url $branch_name $ssh_user_passwd $server_address_info " < ./run_mkiso.sh  > $log_path/amd64-server.log 2>&1 &
         ssh  $ssh_user_name@$arm64_server "bash -s $git_url $branch_name $ssh_user_passwd $server_address_info " < ./run_mkiso.sh  > $log_path/arm64-server.log 2>&1 &
         ssh  $ssh_user_name@$mips64_server "bash -s $git_url $branch_name $ssh_user_passwd $server_address_info " < ./run_mkiso.sh  > $log_path/mips64-server.log 2>&1 &
