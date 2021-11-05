@@ -1,19 +1,17 @@
 #!/bin/bash
 set -x
 
-source ./mkiso.conf
-
-git_url="$git_url"
-branch_name="$branch_name"
-sudo_passwd="$ssh_user_passwd"
+git_url="$1"
+branch_name="$2"
+sudo_passwd="$3"
 work_path="/data/build_iso"
 project_name=$(echo "$git_url"|sed  "s|.*/||g"|sed "s|.git||g")
 echo "$project_name"
 datetime=$(date +%Y%m%d%H%M%S)
-arch="$4"
 
-server_address_info="$server_address_info"
+server_address_info="$4"
 
+arch=""
 
 if [ "$git_url" == "" ] || [ "$branch_name" == "" ] || [ "$sudo_passwd" == "" ] ;then
     echo "git地址或分支错误或未输入用户密码..."
