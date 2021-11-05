@@ -2,7 +2,11 @@
 
 source ./owntest.conf
 
-ip_adress=$1
+ip_adress=$ip_adress
+
+if [ "$1" != "" ];then
+    ip_adress=$1
+fi
 
 if [ $ip_adress == "" ];then
     echo "请输入ip"
