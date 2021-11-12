@@ -3,12 +3,12 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import ComputerIcon from '@mui/icons-material/Computer';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import axios from 'axios'
 
 
 function Mkiso() {
@@ -16,11 +16,21 @@ function Mkiso() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      git_url: data.get('git_url'),
-      branch_name: data.get('branch_name'),
-      arch: data.get('arch'),
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8000',
+      data: {
+        git_url: data.get('git_url'),
+        branch_name: data.get('branch_name'),
+        arch: data.get('arch')
+      }
     });
+    
+    // console.log({
+    //   git_url: data.get('git_url'),
+    //   branch_name: data.get('branch_name'),
+    //   arch: data.get('arch'),
+    // });
   };
   return (
       <Container component="main" fixed >
