@@ -1,2 +1,4 @@
 rocket-server/target
 log
+web/node_modules
+web/package-lock.json
