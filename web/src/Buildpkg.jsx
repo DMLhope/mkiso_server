@@ -5,23 +5,23 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import ComputerIcon from "@mui/icons-material/Computer";
+import BuildIcon from '@mui/icons-material/Build';
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
 import Qs from "qs";
 
-function Mkiso() {
+function Buildpkg() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     axios.post(
-        "http://127.0.0.1:8000/mkiso",
+        "http://127.0.0.1:8000/buildpkg",
         Qs.stringify({
           git_url: data.get("git_url"),
           branch_name: data.get("branch_name"),
-          arch: data.get("arch"),
+          // arch: data.get("arch"),
         }))
         .then(function (response) {
           console.log(response);
@@ -42,11 +42,11 @@ function Mkiso() {
         }}
       >
         <Avatar sx={{ m: 2, bgcolor: "primary.main", width: 120, height: 120 }}>
-          <ComputerIcon sx={{ fontSize: 90 }} />
+          <BuildIcon sx={{ fontSize: 90 }} />
         </Avatar>
 
         <Typography variant="h2" component="h3">
-          Mkiso
+          Build Package
         </Typography>
 
         <Box component="form" noValidate onSubmit={handleSubmit}>
@@ -70,7 +70,7 @@ function Mkiso() {
                 label="Branch name"
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
@@ -78,7 +78,7 @@ function Mkiso() {
                 label="Arch"
                 id="arch"
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           <Button
             type="submit"
@@ -98,4 +98,4 @@ function Mkiso() {
   );
 }
 
-export default Mkiso;
+export default Buildpkg;

@@ -32,6 +32,12 @@ if [ "$arch" == "" ] && [ "$1" != "" ];then
     arch=$1
 fi
 
+if [ "$1" != "" ] && [ "$2" != "" ]&& [ "$3" != "" ];then
+    git_url=$1
+    branch_name=$2
+    arch=$3
+fi
+
 if [ ! -d "$log_path" ];then
     mkdir -p "$log_path"
 fi

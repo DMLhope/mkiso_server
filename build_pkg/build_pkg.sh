@@ -9,7 +9,6 @@ datetime=$(date +%Y%m%d%H%M%S)
 
 
 
-
 if [ "$git_url" == "" ] || [ "$branch_name" == "" ] ;then
     echo "conf 文件未配置,检查是否使用参数模式"
     if [ "$1" == "" ] || [ "$2" == "" ];then
@@ -29,20 +28,28 @@ if [ ! -d $work_path ];then
    echo "$sudo_passwd" | sudo -S chown "$user":"$user" "$work_path"
 fi
 
-mkdir -p "$work_path"/"$project_name"/
-package_path="$work_path"/"$project_name"/"$project_name"-"$datetime"
+mkdir -p "$work_path"/"$project_name"-"$datetime"
+package_path="$work_path"/"$project_name"-"$datetime"/"$project_name"
 
 git clone -b "$branch_name" --depth=1 "$git_url"  $package_path ||{ echo "git clone不成功，请查看是否地址或分支或密码错误"; exit 1; }
 
-cd $package_path
+cd $package_path ||{ echo "目录不存在"; exit 1; }
 
-gbp export-orig --upstream-tree=$branch_name
+if [ -f debian/source/format ];then
+    sed -i "s|native|quilt|g" debian/source/format
+fi
+
+gbp export-orig --upstream-tree=$branch_name --no-pristine-tar
 
 mv .git ../
 
 dpkg-source -b .
 
 dsc_path=$(realpath ../*.dsc)
+
+archs='x86_64  aarch64 mips64 sw_64 ' bash /home/dml/bbuilder/admin $dsc_path
+
+
 
 
 
