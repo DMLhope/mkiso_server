@@ -27,7 +27,7 @@ fi
 
 echo "$work_path"/"$project_name"-"$datetime"
 
-git clone -b "$branch_name" --depth=1 "$git_url" "$work_path"/"$project_name"-"$datetime"  ||{ echo "git clone不成功，请查看是否密码错误"; exit 1; }
+git clone -b "$branch_name" --depth=1 "$git_url" "$work_path"/"$project_name"-"$datetime"  ||{ echo "git clone不成功，请查看是否地址或分支或密码错误"; exit 1; }
 
 cd "$work_path"/"$project_name"-"$datetime" || { echo "路径出错"; exit 1; }
 
