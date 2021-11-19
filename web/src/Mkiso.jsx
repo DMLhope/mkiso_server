@@ -10,26 +10,61 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
 import Qs from "qs";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function Mkiso() {
+
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+    status_message: "",
+    alert_status:"error"
+  });
+
+  const { vertical, horizontal, open, status_message,alert_status } = state;
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+    console.log(event.target.git_url.value);
+    
     axios.post(
-        "http://127.0.0.1:8000/mkiso",
+        "http://10.2.18.188:8000/mkiso",
         Qs.stringify({
           git_url: data.get("git_url"),
           branch_name: data.get("branch_name"),
           arch: data.get("arch"),
         }))
         .then(function (response) {
-          console.log(response);
+          console.log(response.data.status);
+          if (response.data.status == 'Error'){
+            setState({ ...state,open: true ,status_message:"任务发送失败",alert_status:"error" });
+          }
+          if (response.data.status == 'Ok'){
+            setState({ ...state,open: true ,status_message:"任务发送成功",alert_status:"success" });
+            event.target.git_url.value="";
+            event.target.branch_name.value="";
+            event.target.arch.value="";
+          }
         })
         .catch(function (error) {
           console.log(error);
         });
   };
+
+  
+  const handleClose = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setState({ ...state, open: false });
+  };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
   return (
     <Container component="main" fixed>
       <CssBaseline />
@@ -89,6 +124,22 @@ function Mkiso() {
           >
             Build
           </Button>
+
+          <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={open}
+            autoHideDuration={6000}
+            onClose={handleClose}
+          >
+            <Alert
+              onClose={handleClose}
+              severity={alert_status}
+              sx={{ width: "100%" }}
+            >
+              {status_message}
+            </Alert>
+          </Snackbar>
+
           <Grid container justifyContent="flex-start">
             <Grid item>status:</Grid>
           </Grid>

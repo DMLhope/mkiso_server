@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Owntest from './Owntest';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,20 +53,24 @@ export default function BasicTabs() {
         <Tabs 
             value={value} 
             onChange={handleChange}
+            variant="fullWidth"
             
             centered
             aria-label="tabs">
-          <Tab label="Mkiso" {...a11yProps(0)} />
-          <Tab label="Buildpkg" {...a11yProps(1)} />
+          <Tab label="Buildpkg" {...a11yProps(0)} />
+          <Tab label="Mkiso" {...a11yProps(1)} />
+          <Tab label="Owntest" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Mkiso />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
         <Buildpkg />
       </TabPanel>
-
+      <TabPanel value={value} index={1}>
+      <Mkiso />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <Owntest />
+      </TabPanel>
     </Box>
   );
 }

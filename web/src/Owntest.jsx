@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import BuildIcon from "@mui/icons-material/Build";
+import ComputerIcon from "@mui/icons-material/Computer";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
@@ -13,8 +13,8 @@ import Qs from "qs";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-function Buildpkg() {
-  // const [open, setOpen] = React.useState(false);
+function Owntest() {
+
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -28,14 +28,12 @@ function Buildpkg() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(event.target.git_url.value);
     
     axios.post(
-        "http://10.2.18.188:8000/buildpkg",
+        "http://10.2.18.188:8000/owntest",
         Qs.stringify({
-          git_url: data.get("git_url"),
-          branch_name: data.get("branch_name"),
-          // arch: data.get("arch"),
+          ip_adress: data.get("ip_adress"),
+          test_name: data.get("test_name"),
         }))
         .then(function (response) {
           console.log(response.data.status);
@@ -44,16 +42,18 @@ function Buildpkg() {
           }
           if (response.data.status == 'Ok'){
             setState({ ...state,open: true ,status_message:"任务发送成功",alert_status:"success" });
-            event.target.git_url.value="";
-            event.target.branch_name.value="";
+            event.target.ip_adress.value="";
+            event.target.test_name.value="";
+
           }
         })
         .catch(function (error) {
           console.log(error);
         });
   };
+
+  
   const handleClose = (reason) => {
-    console.log(reason);
     if (reason === "clickaway") {
       return;
     }
@@ -63,7 +63,6 @@ function Buildpkg() {
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-
   return (
     <Container component="main" fixed>
       <CssBaseline />
@@ -76,32 +75,31 @@ function Buildpkg() {
         }}
       >
         <Avatar sx={{ m: 2, bgcolor: "primary.main", width: 120, height: 120 }}>
-          <BuildIcon sx={{ fontSize: 90 }} />
+          <ComputerIcon sx={{ fontSize: 90 }} />
         </Avatar>
 
         <Typography variant="h2" component="h3">
-          Build Package
+          Owntest
         </Typography>
 
         <Box component="form" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                name="git_url"
+                name="ip_adress"
                 required
                 fullWidth
-                id="git_url"
-                label="Git url"
+                id="ip_adress"
+                label="ip地址"
                 autoFocus
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name="branch_name"
-                required
+                name="test_name"
                 fullWidth
-                id="branch_name"
-                label="Branch name"
+                id="test_name"
+                label="测试模式"
               />
             </Grid>
           </Grid>
@@ -112,8 +110,9 @@ function Buildpkg() {
             sx={{ mt: 3, mb: 2 }}
             size="large"
           >
-            Build
+            Send
           </Button>
+
           <Snackbar
             anchorOrigin={{ vertical, horizontal }}
             open={open}
@@ -128,6 +127,7 @@ function Buildpkg() {
               {status_message}
             </Alert>
           </Snackbar>
+
           <Grid container justifyContent="flex-start">
             <Grid item>status:</Grid>
           </Grid>
@@ -137,4 +137,4 @@ function Buildpkg() {
   );
 }
 
-export default Buildpkg;
+export default Owntest;
