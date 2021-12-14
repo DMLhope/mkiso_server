@@ -8,10 +8,16 @@ import Box from "@mui/material/Box";
 import BuildIcon from "@mui/icons-material/Build";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import Qs from "qs";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import MenuItem from "@mui/material/MenuItem";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 function Buildpkg() {
   // const [open, setOpen] = React.useState(false);
@@ -20,37 +26,83 @@ function Buildpkg() {
     vertical: "top",
     horizontal: "center",
     status_message: "",
-    alert_status:"error"
+    alert_status: "error",
   });
 
-  const { vertical, horizontal, open, status_message,alert_status } = state;
+  const { vertical, horizontal, open, status_message, alert_status } = state;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log(event.target.git_url.value);
-    
-    axios.post(
+    console.log(event.target.x86_64.checked);
+    let arch = "";
+    if (event.target.x86_64.checked) {
+      arch += " x86_64";
+    }
+    if (event.target.aarch64.checked) {
+      arch += " aarch64";
+    }
+    if (event.target.mips64.checked) {
+      arch += " mips64";
+    }
+    if (event.target.sw_64.checked) {
+      arch += " sw_64";
+    }
+    if (arch == "") {
+      console.log("空");
+      setState({
+        ...state,
+        open: true,
+        status_message: "请至少选择一个架构",
+        alert_status: "error",
+      });
+      return;
+    }
+
+    console.log(
+      Qs.stringify({
+        git_url: data.get("git_url"),
+        branch_name: data.get("branch_name"),
+        arch: arch,
+      })
+    );
+
+    console.log(event.target.repo.value);
+    // 发送请求
+    axios
+      .post(
         "http://10.2.18.188:8000/buildpkg",
         Qs.stringify({
           git_url: data.get("git_url"),
           branch_name: data.get("branch_name"),
-          // arch: data.get("arch"),
-        }))
-        .then(function (response) {
-          console.log(response.data.status);
-          if (response.data.status == 'Error'){
-            setState({ ...state,open: true ,status_message:"任务发送失败",alert_status:"error" });
-          }
-          if (response.data.status == 'Ok'){
-            setState({ ...state,open: true ,status_message:"任务发送成功",alert_status:"success" });
-            event.target.git_url.value="";
-            event.target.branch_name.value="";
-          }
+          arch: arch,
         })
-        .catch(function (error) {
-          console.log(error);
-        });
+      )
+      .then(function (response) {
+        console.log(response.data.status);
+        if (response.data.status == "Error") {
+          setState({
+            ...state,
+            open: true,
+            status_message: "任务发送失败",
+            alert_status: "error",
+          });
+        }
+        if (response.data.status == "Ok") {
+          setState({
+            ...state,
+            open: true,
+            status_message: "任务发送成功",
+            alert_status: "success",
+          });
+          event.target.git_url.value = "";
+          event.target.branch_name.value = "";
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   const handleClose = (reason) => {
     console.log(reason);
@@ -63,6 +115,18 @@ function Buildpkg() {
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
+
+  const repos = [
+    {
+      value: "add_new",
+      label: "新建",
+    },
+  ];
+  const [repo, setRepo] = React.useState("add_new");
+  const handleChange = (event) => {
+    setRepo(event.target.value);
+    console.log(event.target.value);
+  };
 
   return (
     <Container component="main" fixed>
@@ -84,14 +148,20 @@ function Buildpkg() {
         </Typography>
 
         <Box component="form" noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Grid item xs={12}>
               <TextField
                 name="git_url"
                 required
                 fullWidth
                 id="git_url"
-                label="Git url"
+                label="Git地址"
                 autoFocus
               />
             </Grid>
@@ -101,7 +171,49 @@ function Buildpkg() {
                 required
                 fullWidth
                 id="branch_name"
-                label="Branch name"
+                label="分支名"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="repo"
+                select
+                fullWidth
+                label="repo"
+                value={repo}
+                onChange={handleChange}
+                helperText="请选择仓库"
+              >
+                {repos.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+
+            <Grid item md={3}>
+              <FormControlLabel
+                control={<Checkbox defaultChecked name="x86_64" />}
+                label="x86_64"
+              />
+            </Grid>
+            <Grid item md={3}>
+              <FormControlLabel
+                control={<Checkbox defaultChecked name="aarch64" />}
+                label="aarch64"
+              />
+            </Grid>
+            <Grid item md={3}>
+              <FormControlLabel
+                control={<Checkbox defaultChecked name="mips64" />}
+                label="mips64"
+              />
+            </Grid>
+            <Grid item md={3}>
+              <FormControlLabel
+                control={<Checkbox defaultChecked name="sw_64" />}
+                label="sw_64"
               />
             </Grid>
           </Grid>
@@ -128,10 +240,29 @@ function Buildpkg() {
               {status_message}
             </Alert>
           </Snackbar>
-          <Grid container justifyContent="flex-start">
+          {/* <Grid container justifyContent="flex-start">
             <Grid item>status:</Grid>
-          </Grid>
+          </Grid> */}
         </Box>
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: "absolute", bottom: 16, right: 16 }}
+          icon={<SpeedDialIcon />}
+        >
+          <SpeedDialAction>
+            <Box
+              sx={{
+                width: 300,
+                height: 300,
+                backgroundColor: "primary.dark",
+                "&:hover": {
+                  backgroundColor: "primary.main",
+                  opacity: [0.9, 0.8, 0.7],
+                },
+              }}
+            />
+          </SpeedDialAction>
+        </SpeedDial>
       </Box>
     </Container>
   );
