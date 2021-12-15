@@ -18,7 +18,6 @@ function mkiso(git_url,branch_name,arch,res){
         return;
     }
 
-
     option_data=git_url+" "+branch_name+" "+arch;
     console.log(option_data);
     
@@ -33,10 +32,10 @@ function mkiso(git_url,branch_name,arch,res){
     res.send({status:'Ok'});
 }
 
-function buildpkg(git_url,branch_name,arch,res){
+function buildpkg(git_url,branch_name,repo,arch,res){
 
     
-    if (git_url == "" || branch_name == "" || arch ==""){
+    if (git_url == "" || branch_name == "" || arch =="" || repo =="" ){
         console.log("参数缺失");
         //返回一个状态--暂定
         res.send({status:'Error'});
@@ -48,12 +47,12 @@ function buildpkg(git_url,branch_name,arch,res){
     option_data=git_url+" "+branch_name;
     console.log(option_data);
 
-    // shell.cd('../build_pkg/');
-    // shell.exec('bash build_pkg.sh '+option_data,function (code, stdout, stderr) {
-    //     console.log('Exit code:', code);
-    //     console.log('Program output:', stdout);
-    //     console.log('Program stderr:', stderr);
-    //   },{async:true});
+    shell.cd('../build_pkg/');
+    shell.exec('bash build_pkg.sh '+option_data,function (code, stdout, stderr) {
+        console.log('Exit code:', code);
+        console.log('Program output:', stdout);
+        console.log('Program stderr:', stderr);
+      },{async:true});
 
     //返回一个状态--暂定
     res.send({status:'Ok'});
@@ -96,7 +95,7 @@ app.post("/mkiso",function(req,res){
 app.post("/buildpkg",function(req,res){
     //允许来自其他端口的请求头
     res.header("Access-Control-Allow-Origin", "*");
-    buildpkg(req.body.git_url,req.body.branch_name,req.body.arch,res);
+    buildpkg(req.body.git_url,req.body.branch_name,req.body.repo,req.body.arch,res);
     
     
 })
