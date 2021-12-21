@@ -12,6 +12,7 @@ import axios from "axios";
 import Qs from "qs";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Appbar from "./Appbar";
 
 function Owntest() {
 
@@ -25,9 +26,20 @@ function Owntest() {
 
   const { vertical, horizontal, open, status_message,alert_status } = state;
 
+  const [checked, setChecked] = React.useState(true);
+
+  const switchChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    if (event.target.debug_mode.checked){
+      console.log("测试模式");
+      return
+    }
     
     axios.post(
         "http://10.2.18.188:8000/owntest",
@@ -131,6 +143,9 @@ function Owntest() {
           <Grid container justifyContent="flex-start">
             <Grid item>status:</Grid>
           </Grid>
+
+          <Appbar name="debug_mode" checked={checked} onChange={switchChange} />
+
         </Box>
       </Box>
     </Container>

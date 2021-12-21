@@ -15,11 +15,11 @@ import Qs from "qs";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import Appbar from "./Appbar";
 
 function Buildpkg() {
+  
+
   // const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     open: false,
@@ -29,13 +29,17 @@ function Buildpkg() {
     alert_status: "error",
   });
 
+  const [checked, setChecked] = React.useState(true);
+
+  const switchChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
   const { vertical, horizontal, open, status_message, alert_status } = state;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(event.target.git_url.value);
-    console.log(event.target.x86_64.checked);
     let arch = "";
     if (event.target.x86_64.checked) {
       arch += " x86_64";
@@ -69,6 +73,10 @@ function Buildpkg() {
     );
 
     console.log(event.target.repo.value);
+    if (event.target.debug_mode.checked){
+      console.log("测试模式");
+      return
+    }
     // 发送请求
     axios
       .post(
@@ -103,6 +111,7 @@ function Buildpkg() {
       .catch(function (error) {
         console.log(error);
       });
+    console.log("发送请求结束");
   };
   const handleClose = (reason) => {
     console.log(reason);
@@ -240,29 +249,13 @@ function Buildpkg() {
               {status_message}
             </Alert>
           </Snackbar>
-          {/* <Grid container justifyContent="flex-start">
-            <Grid item>status:</Grid>
-          </Grid> */}
+
+          
+          
+          <Appbar name="debug_mode" checked={checked} onChange={switchChange} />
+
+          
         </Box>
-        {/* <SpeedDial
-          ariaLabel="SpeedDial basic example"
-          sx={{ position: "absolute", bottom: 16, right: 16 }}
-          icon={<SpeedDialIcon />}
-        >
-          <SpeedDialAction>
-            <Box
-              sx={{
-                width: 300,
-                height: 300,
-                backgroundColor: "primary.dark",
-                "&:hover": {
-                  backgroundColor: "primary.main",
-                  opacity: [0.9, 0.8, 0.7],
-                },
-              }}
-            />
-          </SpeedDialAction>
-        </SpeedDial> */}
       </Box>
     </Container>
   );

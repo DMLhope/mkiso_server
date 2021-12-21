@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import AppBar from '@mui/material/AppBar';
 import Owntest from './Owntest';
 
 function TabPanel(props) {
@@ -48,8 +50,10 @@ export default function BasicTabs() {
   };
 
   return (
+    // <Container >
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}> */}
+      {/* <AppBar position="static"> */}
         <Tabs 
             value={value} 
             onChange={handleChange}
@@ -61,7 +65,8 @@ export default function BasicTabs() {
           <Tab label="Mkiso" {...a11yProps(1)} />
           <Tab label="Owntest" {...a11yProps(2)} />
         </Tabs>
-      </Box>
+        {/* </AppBar> */}
+      {/* </Box> */}
       <TabPanel value={value} index={0}>
         <Buildpkg />
       </TabPanel>
@@ -72,5 +77,6 @@ export default function BasicTabs() {
         <Owntest />
       </TabPanel>
     </Box>
+    // </Container>
   );
 }
