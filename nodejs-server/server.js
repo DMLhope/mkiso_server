@@ -1,6 +1,7 @@
 var express = require("express");
 var shell = require('shelljs')
 var bodyParser = require('body-parser');//解析,用req.body获取post参数
+var multiparty = require('multiparty');
 
 
 const port=8000; //定义后端端口号为8000
@@ -107,5 +108,21 @@ app.post("/owntest",function(req,res){
     
     
 })
+
+
+// app.post("/file_upload", function (req, res) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     console.log(req);
+//     console.log('FIRST TEST: ' + JSON.stringify(req.files));
+//     console.log('second TEST: ' +req.files.theFile.name);
+//     fs.readFile(req.files.theFile.path, function (err, data) {
+//         var newPath = "./file"+req.files.theFile.name;
+//         fs.writeFile(newPath, data, function (err) {
+//           res.send("hi");  
+//         });
+//     });
+
+    
+// }) 
 
 app.listen(port,() => console.log(`Server listening on port ${port}!`));
