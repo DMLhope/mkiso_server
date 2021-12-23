@@ -16,10 +16,11 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
 import Appbar from "./Appbar";
+import Conf_page from "./Conf_page";
 
 function Buildpkg() {
   
-
+  
   // const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     open: false,
@@ -64,13 +65,6 @@ function Buildpkg() {
       return;
     }
 
-    console.log(
-      Qs.stringify({
-        git_url: data.get("git_url"),
-        branch_name: data.get("branch_name"),
-        arch: arch,
-      })
-    );
 
     console.log(event.target.repo.value);
     if (event.target.debug_mode.checked){
@@ -166,6 +160,7 @@ function Buildpkg() {
           >
             <Grid item xs={12}>
               <TextField
+                color="primary"
                 name="git_url"
                 required
                 fullWidth
@@ -252,7 +247,8 @@ function Buildpkg() {
 
           
           
-          <Appbar name="debug_mode" checked={checked} onChange={switchChange} />
+          <Appbar name="debug_mode"  onChange={switchChange} />
+          <Conf_page />
 
           
         </Box>

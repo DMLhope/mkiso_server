@@ -6,18 +6,25 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
+
 
 export default function Appbar(props) {
   return (
     <AppBar
             position="fixed"
             color="primary"
-            sx={{ top: "auto", bottom: 0 }}
+            sx={{ top: "auto", bottom: 0,zIndex: 'tooltip' }}
           >
             <Toolbar>
-              <IconButton color="inherit" aria-label="open drawer">
+              <IconButton color="inherit" onClick={props.menu_onClick} aria-label="open drawer">
                 <MenuIcon />
               </IconButton>
+              <IconButton color="inherit" onClick={props.up_onClick} aria-label="open drawer">
+                <KeyboardArrowUpIcon />
+              </IconButton>
+
               {/* <StyledFab color="secondary" aria-label="add">
                 <AddIcon />
               </StyledFab> */}
