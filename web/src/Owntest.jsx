@@ -42,7 +42,7 @@ function Owntest() {
     }
     
     axios.post(
-        "http://10.2.18.188:8000/owntest",
+        "http://10.2.17.189:8000/owntest",
         Qs.stringify({
           ip_adress: data.get("ip_adress"),
           test_name: data.get("test_name"),

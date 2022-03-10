@@ -33,6 +33,10 @@ if [ $2 != "" ];then
         ltp)
             sshpass -p "$password" ssh "$ssh_address"  "bash ~/do_owntest_ltp.sh"
             ;;
+
+        conf)
+	    exit 0
+            ;;
         *)
         echo "请检查参数"
         exit 1

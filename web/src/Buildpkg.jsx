@@ -74,7 +74,7 @@ function Buildpkg() {
     // 发送请求
     axios
       .post(
-        "http://10.2.18.188:8000/buildpkg",
+        "http://10.2.17.189:8000/buildpkg",
         Qs.stringify({
           git_url: data.get("git_url"),
           branch_name: data.get("branch_name"),

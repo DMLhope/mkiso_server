@@ -43,7 +43,7 @@ function Mkiso() {
     }
     
     axios.post(
-        "http://10.2.18.188:8000/mkiso",
+        "http://10.2.17.189:8000/mkiso",
         Qs.stringify({
           git_url: data.get("git_url"),
           branch_name: data.get("branch_name"),
