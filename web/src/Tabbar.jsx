@@ -62,8 +62,8 @@ export default function BasicTabs() {
             centered
             aria-label="tabs">
           <Tab label="Mkiso" {...a11yProps(0)} />
-          <Tab label="Buildpkg" {...a11yProps(1)} disbale/>
-          <Tab label="Owntest" {...a11yProps(2)}  disbale/>
+          <Tab label="Buildpkg" {...a11yProps(1)} disabled/>
+          <Tab label="Owntest" {...a11yProps(2)}  disabled/>
         </Tabs>
         {/* </AppBar> */}
       {/* </Box> */}
