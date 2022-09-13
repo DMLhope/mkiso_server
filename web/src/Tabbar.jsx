@@ -61,17 +61,17 @@ export default function BasicTabs() {
             
             centered
             aria-label="tabs">
-          <Tab label="Buildpkg" {...a11yProps(0)} />
-          <Tab label="Mkiso" {...a11yProps(1)} />
-          <Tab label="Owntest" {...a11yProps(2)} />
+          <Tab label="Mkiso" {...a11yProps(0)} />
+          <Tab label="Buildpkg" {...a11yProps(1)} disbale/>
+          <Tab label="Owntest" {...a11yProps(2)}  disbale/>
         </Tabs>
         {/* </AppBar> */}
       {/* </Box> */}
-      <TabPanel value={value} index={0}>
-        <Buildpkg />
+      <TabPanel value={value} index={0}>        
+        <Mkiso />
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <Mkiso />
+        <Buildpkg />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Owntest />
