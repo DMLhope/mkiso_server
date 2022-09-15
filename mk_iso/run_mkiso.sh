@@ -45,6 +45,9 @@ if [ "$arch" == "" ];then
     sw_64)
         arch="sw_64"
     ;;
+    loongarch64)
+        arch="loongarch64"
+    ;;
     *)
         echo "arch error or not support"
         exit 1
@@ -52,7 +55,7 @@ if [ "$arch" == "" ];then
     esac
 fi
 
-echo "$sudo_passwd" | sudo -S bash ./mkiso.sh $arch > ./build_iso_$arch.log 2>&1
+echo "$sudo_passwd" | sudo -S bash ./mkiso.sh > ./build_iso_$arch.log 2>&1
 
 scp live/"$(date +%Y%m%d)"/*.iso ./build_iso_$arch.log  "$server_address_info"
 
